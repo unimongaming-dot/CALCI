@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>Special Formula Calculator</title>
+
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --panel: #121d30;
+  --line: #2a3952;
+  --text: #eef4ff;
+  --muted: #a9b7ce;
+  --accent: #7c9cff;
+  --good: #6ee7b7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(
+    ellipse at top,
+    #182746 0,
+    #0b1220 55%
+  );
+  color: var(--text);
+  font: 16px/1.5 system-ui, sans-serif;
+  padding: 24px 14px 40px;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+header {
+  margin: 8px 0 22px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: .75rem;
+  font-weight: 800;
+}
+
+h1 {
+  font-size: clamp(1.7rem, 5vw, 2.5rem);
+  line-height: 1.1;
+  margin: 8px 0;
+}
+
+.intro {
+  color: var(--muted);
+  margin: 0;
+}
+
+.card {
+  background: rgba(18, 29, 48, .94);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  margin: 16px 0;
+  box-shadow: 0 14px 36px #0002;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin: 0 0 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+label {
+  display: block;
+  color: var(--muted);
+  font-size: .88rem;
+  margin-bottom: 6px;
+}
+
+input, select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: #0b1425;
+  color: var(--text);
+  padding: 12px;
+  border-radius: 10px;
+  font: inherit;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px #7c9cff22;
+}
+
+.formula {
+  background: #0b1425;
+  border: 1px dashed #3c4e6d;
+  border-radius: 12px;
+  padding: 13px;
+  color: #d7e3fb;
+  overflow-wrap: anywhere;
+  margin-top: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font: 700 1rem system-ui, sans-serif;
+}
+
+.primary {
+  background: var(--accent);
+  color: #091226;
+  flex: 1;
+}
+
+.secondary {
+  background: #263650;
+  color: var(--text);
+  border: 1px solid #3a4d6d;
+}
+
+.result {
+  background: #07101e;
+  border: 1px solid #2e4567;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 16px;
+}
+
+.result-label {
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+#resultValue {
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  margin-top: 3px;
+}
+
+#resultNote {
+  color: var(--good);
+  font-size: .9rem;
+  margin-top: 4px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: .86rem;
+  margin: 10px 0 0;
+}
+
+.status {
+  color: var(--good);
+  min-height: 1.4em;
+  font-size: .88rem;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  color: var(--muted);
+  text-align: center;
+  font-size: .82rem;
+  margin-top: 24px;
+}
+
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Personal tool</div>
+  <h1>Special Formula Calculator</h1>
+  <p class="intro">
+    Enter three 4-digit numbers. Press equals to display
+    your saved number or the actual calculation.
+  </p>
+</header>
+
+<section class="card">
+  <h2>1. Enter three 4-digit numbers</h2>
+
+  <div class="grid">
+    <div>
+      <label for="n1">4-digit number 1</label>
+      <input id="n1" type="number" inputmode="numeric"
+        min="1000" max="9999" step="1" value="1234">
+    </div>
+
+    <div>
+      <label for="n2">4-digit number 2</label>
+      <input id="n2" type="number" inputmode="numeric"
+        min="1000" max="9999" step="1" value="2345">
+    </div>
+
+    <div>
+      <label for="n3">4-digit number 3</label>
+      <input id="n3" type="number" inputmode="numeric"
+        min="1000" max="9999" step="1" value="3456">
+    </div>
+  </div>
+
+  <p class="hint">
+    Formula: first number × second number × third number.
+  </p>
+
+  <div class="formula" id="formulaPreview" aria-live="polite"></div>
+</section>
+
+<section class="card">
+  <h2>2. Choose what appears when you press equals</h2>
+
+  <label for="resultMode">Result mode</label>
+  <select id="resultMode">
+    <option value="saved">Show my saved number only</option>
+    <option value="calculated">Show actual multiplication result</option>
+  </select>
+
+  <div id="savedSettings" style="margin-top:15px">
+    <label for="savedNumber">
+      Number to display (change anytime)
+    </label>
+
+    <input id="savedNumber" type="text"
+      inputmode="decimal"
+      placeholder="Enter the number you want to appear">
+
+    <div class="actions">
+      <button class="secondary" id="saveBtn" type="button">
+        Save display number
+      </button>
+
+      <button class="secondary" id="clearSavedBtn" type="button">
+        Clear saved number
+      </button>
+    </div>
+
+    <p class="hint">
+      Your saved number stays in this browser on this device.
+      It is not uploaded to GitHub.
+    </p>
+
+    <div class="status" id="saveStatus" role="status"></div>
+  </div>
+
+  <div class="actions">
+    <button class="primary" id="equalsBtn" type="button">
+      = Calculate
+    </button>
+
+    <button class="secondary" id="resetBtn" type="button">
+      Reset inputs
+    </button>
+  </div>
+
+  <div class="result" aria-live="polite">
+    <div class="result-label">DISPLAY</div>
+    <div id="resultValue">Ready</div>
+    <div id="resultNote">
+      Enter three numbers, then press Calculate.
+    </div>
+  </div>
+</section>
+
+<footer>
+  Runs in your browser • No account required
+</footer>
+
+</div>
+
+<script>
+(() => {
+  const ids = ["n1", "n2", "n3"];
+
+  const el = id => document.getElementById(id);
+
+  function getNumber(id) {
+    const raw = el(id).value.trim();
+
+    if (raw === "") {
+      throw new Error("Please enter all three numbers.");
+    }
+
+    const value = Number(raw);
+
+    if (
+      !Number.isInteger(value) ||
+      value < 1000 ||
+      value > 9999
+    ) {
+      throw new Error(
+        "Each number must be a whole number from 1000 to 9999."
+      );
+    }
+
+    return value;
+  }
+
+  function calculate() {
+    const n1 = getNumber("n1");
+    const n2 = getNumber("n2");
+    const n3 = getNumber("n3");
+
+    // BigInt prevents precision loss in large integer products.
+    const result =
+      BigInt(n1) * BigInt(n2) * BigInt(n3);
+
+    return { n1, n2, n3, result: result.toString() };
+  }
+
+  function updatePreview() {
+    try {
+      const x = calculate();
+
+      el("formulaPreview").textContent =
+        `${x.n1} × ${x.n2} × ${x.n3}`;
+    } catch (error) {
+      el("formulaPreview").textContent = error.message;
+    }
+
+    el("savedSettings").classList.toggle(
+      "hidden",
+      el("resultMode").value !== "saved"
+    );
+  }
+
+  function loadSaved() {
+    const saved = localStorage.getItem(
+      "specialFormulaCalculator.savedNumber"
+    );
+
+    if (saved !== null) {
+      el("savedNumber").value = saved;
+    }
+  }
+
+  function saveNumber() {
+    const value = el("savedNumber").value.trim();
+
+    if (value === "") {
+      el("saveStatus").textContent =
+        "Enter a number before saving.";
+      return;
+    }
+
+    if (!/^-?(?:\d+\.?\d*|\.\d+)$/.test(value)) {
+      el("saveStatus").textContent =
+        "Please enter a valid number.";
+      return;
+    }
+
+    localStorage.setItem(
+      "specialFormulaCalculator.savedNumber",
+      value
+    );
+
+    el("saveStatus").textContent =
+      "Display number saved. Press Calculate to show it.";
+  }
+
+  el("saveBtn").addEventListener("click", saveNumber);
+
+  el("clearSavedBtn").addEventListener("click", () => {
+    localStorage.removeItem(
+      "specialFormulaCalculator.savedNumber"
+    );
+
+    el("savedNumber").value = "";
+    el("saveStatus").textContent = "Saved number cleared.";
+    el("resultValue").textContent = "Ready";
+    el("resultNote").textContent =
+      "Enter and save a display number, then calculate.";
+  });
+
+  el("equalsBtn").addEventListener("click", () => {
+    try {
+      const calc = calculate();
+
+      if (el("resultMode").value === "saved") {
+        const saved = localStorage.getItem(
+          "specialFormulaCalculator.savedNumber"
+        );
+
+        if (saved === null || saved.trim() === "") {
+          el("resultValue").textContent = "No saved number";
+          el("resultNote").textContent =
+            "Enter your number and click Save display number.";
+          return;
+        }
+
+        el("resultValue").textContent = saved;
+        el("resultNote").textContent =
+          "Your saved number is displayed.";
+      } else {
+        el("resultValue").textContent = calc.result;
+        el("resultNote").textContent =
+          `${calc.n1} × ${calc.n2} × ${calc.n3}`;
+      }
+    } catch (error) {
+      el("resultValue").textContent = "Check inputs";
+      el("resultNote").textContent = error.message;
+    }
+  });
+
+  el("resetBtn").addEventListener("click", () => {
+    el("n1").value = "1234";
+    el("n2").value = "2345";
+    el("n3").value = "3456";
+
+    el("resultValue").textContent = "Ready";
+    el("resultNote").textContent =
+      "Enter three numbers, then press Calculate.";
+
+    updatePreview();
+  });
+
+  for (const id of [...ids, "resultMode"]) {
+    el(id).addEventListener("input", updatePreview);
+  }
+
+  el("resultMode").addEventListener("change", updatePreview);
+
+  loadSaved();
+  updatePreview();
+})();
+</script>
+</body>
+</html>
